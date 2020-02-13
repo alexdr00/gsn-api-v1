@@ -1,0 +1,42 @@
+{
+  "name": "gsn-api",
+  "version": "1.0.0",
+  "description": "Game Sale Notifier API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alexdr00/gsn-api.git"
+  },
+  "author": "Alexander Dominguez",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/alexdr00/gsn-api/issues"
+  },
+  "homepage": "https://github.com/alexdr00/gsn-api#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "cheerio": "^1.0.0-rc.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.9.1",
+    "mysql": "^2.18.1",
+    "puppeteer": "^2.1.1",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "jest": "^25.1.0",
+    "moxios": "^0.4.0",
+    "nodemon": "^2.0.2",
+    "sinon": "^8.1.1",
+    "supertest": "^4.0.2"
+  }
+}
