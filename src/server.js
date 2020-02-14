@@ -1,28 +1,28 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-class Server {
-  constructor() {
-    this.app = express();
-    this.setup();
+function server() {
+  const app = express();
+  setup();
+
+  return { app };
+
+  function setup() {
+    useMiddleware();
+    mountRoutes();
   }
 
-  setup() {
-    this.useMiddleware();
-    this.mountRoutes();
+  function useMiddleware() {
+    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(bodyParser.json());
   }
 
-  useMiddleware() {
-    this.app.use(bodyParser.urlencoded({ extended: false }));
-    this.app.use(bodyParser.json());
-  }
-
-  mountRoutes() {
+  function mountRoutes() {
     const router = express.Router();
     router.use('/health', (req, res) => res.send({ message: 'ok' }));
 
-    this.app.use('/v1', router);
+    app.use('/v1', router);
   }
 }
 
-module.exports = new Server();
+module.exports = server();

@@ -4,13 +4,27 @@ const {
   combine, timestamp, printf, errors, colorize, metadata,
 } = format;
 
-const customFormat = printf(({ level, message, metadata: meta }) => {
+const customFormat = printf(({
+  level, stack, message, metadata: meta,
+}) => {
   const { name, body } = message;
   const messageWithName = `${name}: ${body}`;
-  const error = meta.error ? `:\n${meta.error.stack}` : '';
   const messageBody = name ? messageWithName : message;
+  const metaEntries = Object.entries(meta);
 
-  return `(${meta.timestamp}) - [${level}] ${messageBody}${error}`;
+  let errorLog = `(${meta.timestamp}) - [${level}] \noverview: ${messageBody}`;
+  const regularLog = `(${meta.timestamp}) - [${level}] ${messageBody}`;
+
+  if (metaEntries) {
+    metaEntries.forEach((metaEntry) => {
+      const metaKey = metaEntry[0];
+      const metaValue = metaEntry[1];
+      errorLog += `\n${metaKey}: ${metaValue}`;
+    });
+  }
+
+  errorLog += stack ? `\nstack trace:\n${stack}` : '';
+  return level === 'error' ? `${errorLog}\n` : regularLog;
 });
 
 const logsPath = `${__dirname}/../../logs`;
@@ -18,7 +32,7 @@ const logsPath = `${__dirname}/../../logs`;
 const logger = createLogger({
   level: 'info',
   format: combine(
-    timestamp({ format: 'YYYY-MMM-D hh:mm:ss:SSS' }),
+    timestamp({ format: 'YYYY-MMM-D hh:mm:ss' }),
     metadata(),
     customFormat,
   ),

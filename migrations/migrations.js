@@ -61,7 +61,7 @@ const migrations = ({ db, migrationNames, migrationsDirectory }) => {
       const migration = require(migrationPath)({ db });
       await migration.up();
     } catch (error) {
-      logger.error(`Failed to run: ${migrationPath}`);
+      logger.warn(`Failed to run: ${migrationPath}`);
       logger.error(error);
       process.exit(1);
     }
@@ -77,7 +77,7 @@ const migrations = ({ db, migrationNames, migrationsDirectory }) => {
     try {
       await db.run(query, parameters);
     } catch (error) {
-      logger.error(`Failed to mark as executed: ${migrationIdentifier}`);
+      logger.warn(`Failed to mark as executed: ${migrationIdentifier}`);
       logger.error(error);
       process.exit(1);
     }
