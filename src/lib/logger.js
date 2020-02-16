@@ -16,6 +16,7 @@ const customFormat = printf(({
   const regularLog = `(${meta.timestamp}) - [${level}] ${messageBody}`;
 
   if (metaEntries) {
+    errorLog += '\n--metadata--';
     metaEntries.forEach((metaEntry) => {
       const metaKey = metaEntry[0];
       const metaValue = metaEntry[1];
@@ -23,7 +24,7 @@ const customFormat = printf(({
     });
   }
 
-  errorLog += stack ? `\nstack trace:\n${stack}` : '';
+  errorLog += stack ? `\n--stack trace--\n${stack}` : '';
   return level === 'error' ? `${errorLog}\n` : regularLog;
 });
 
