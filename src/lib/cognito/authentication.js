@@ -22,7 +22,8 @@ function authentication(state) {
         onSuccess(result) {
           const idToken = result.getIdToken().getJwtToken();
           const refreshToken = result.getRefreshToken().getToken();
-          const tokens = { refreshToken, idToken };
+          const expiration = result.getIdToken().payload.exp;
+          const tokens = { refreshToken, idToken, expiration };
           resolve(tokens);
         },
         onFailure(error) {

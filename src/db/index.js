@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 
-function db() {
+function makeDbConnection() {
   const connection = establishConnection();
 
   return { run };
@@ -28,4 +28,4 @@ function db() {
   }
 }
 
-module.exports = db();
+module.exports = makeDbConnection();

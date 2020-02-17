@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/alexdr00/gsn-api#readme",
   "dependencies": {
+    "@hapi/joi": "^17.1.0",
     "amazon-cognito-identity-js": "^3.2.4",
     "aws-sdk": "^2.619.0",
     "axios": "^0.19.2",

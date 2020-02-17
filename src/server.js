@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const authRouter = require('./routes/authRoutes');
 
 function server() {
   const app = express();
@@ -19,6 +20,7 @@ function server() {
 
   function mountRoutes() {
     const router = express.Router();
+    router.use('/auth', authRouter);
     router.use('/health', (req, res) => res.send({ message: 'ok' }));
 
     app.use('/v1', router);
