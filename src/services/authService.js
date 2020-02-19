@@ -1,5 +1,6 @@
 const cognito = require('../lib/cognito');
 const ServiceException = require('../lib/ServiceException');
+const userRepository = require('../repositories/userRepository');
 
 function makeAuthService() {
   return { signIn, signUp };
@@ -18,6 +19,7 @@ function makeAuthService() {
     try {
       const { email, password, name } = signUpData;
       await cognito.signUp({ email, password, name });
+      const result = await userRepository.createUser({ email });
     } catch (error) {
       throw new ServiceException(error, 'SignUpFailure');
     }

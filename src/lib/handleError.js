@@ -1,5 +1,10 @@
+/* eslint-disable no-console */
+
 const any = require('../helpers/any');
 const errorMessages = require('../constants/errorsMessages');
+const logger = require('../lib/logger');
+
+const isProductionEnv = process.env.NODE_ENV === 'production';
 
 function handleError(res, error) {
   const isJoiError = error.isJoi;
@@ -64,7 +69,13 @@ function handleError(res, error) {
       statusCode: 500,
       status: 'Internal Server Error',
     };
-    return makeError(errorDetails);
+
+    if (isProductionEnv) {
+      // Logging 500 even in production
+      logError(errorDetails);
+    }
+    // Provide more detailed information of the 500 error if we are not in prod.
+    return isProductionEnv ? errorDetails : makeError(errorDetails);
   }
 
   function makeForbiddenError() {
@@ -73,6 +84,7 @@ function handleError(res, error) {
       statusCode: 403,
       status: 'Forbidden',
     };
+
     return makeError(errorDetails);
   }
 
@@ -86,7 +98,20 @@ function handleError(res, error) {
       detail: errorDetails.detail,
       validationMessages: errorDetails.joiDetails,
     };
+
+    logError(errorDetails);
     return errorShape;
+  }
+
+  function logError(errorDetails) {
+    logger.error({ ...errorDetails, ...error, stack: error.stack });
+    if (!isProductionEnv) {
+      if (error.stack) {
+        // logging with conventional console in order to have quick
+        // access to the links provided by the stack trace.
+        console.error(error.stack);
+      }
+    }
   }
 }
 
