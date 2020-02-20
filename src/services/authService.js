@@ -8,7 +8,8 @@ function makeAuthService() {
   async function signIn(signInData) {
     try {
       const { email, password } = signInData;
-      const tokens = await cognito.signIn({ email, password });
+      const { tokens, payload } = await cognito.signIn({ email, password });
+
       return tokens;
     } catch (error) {
       throw new ServiceException(error, 'SignInFailure');

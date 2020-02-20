@@ -21,10 +21,10 @@ function authentication(state) {
       cognitoUser.authenticateUser(authenticationDetails, {
         onSuccess(result) {
           const idToken = result.getIdToken().getJwtToken();
+          const { payload } = result.getIdToken();
           const refreshToken = result.getRefreshToken().getToken();
-          const expiration = result.getIdToken().payload.exp;
-          const tokens = { refreshToken, idToken, expiration };
-          resolve(tokens);
+          const tokens = { refreshToken, idToken };
+          resolve({ tokens, payload });
         },
         onFailure(error) {
           reject(error);
