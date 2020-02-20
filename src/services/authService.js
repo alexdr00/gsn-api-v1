@@ -19,7 +19,7 @@ function makeAuthService() {
     try {
       const { email, password, name } = signUpData;
       await cognito.signUp({ email, password, name });
-      const result = await userRepository.createUser({ email });
+      await userRepository.createUser({ email });
     } catch (error) {
       throw new ServiceException(error, 'SignUpFailure');
     }

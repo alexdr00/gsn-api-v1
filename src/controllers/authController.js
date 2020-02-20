@@ -1,7 +1,9 @@
 const validateAuth = require('../validators/authValidator');
 const authNormalizer = require('../normalizers/authNormalizer');
 const handleError = require('../lib/handleError');
+const handleSuccess = require('../lib/handleSuccess');
 const authService = require('../services/authService');
+const infoMessages = require('../constants/infoMessages');
 
 function authController() {
   return { signOut, signIn, signUp };
@@ -14,7 +16,11 @@ function authController() {
 
       const tokens = await authService.signIn(normalizedData);
 
-      res.status(200).json({ data: tokens });
+      const response = {
+        message: infoMessages.SIGN_IN({ name: 'AlexTEMP' }),
+        data: tokens,
+      };
+      handleSuccess(res, response);
     } catch (error) {
       handleError(res, error);
     }
@@ -26,9 +32,12 @@ function authController() {
       const normalize = authNormalizer(validatedData);
       const normalizedData = normalize.signUpData();
 
-      const tokens = await authService.signUp(normalizedData);
-
-      res.status(201).json({ data: tokens });
+      await authService.signUp(normalizedData);
+      const response = {
+        message: infoMessages.SIGN_UP,
+        data: null,
+      };
+      handleSuccess(res, response);
     } catch (error) {
       handleError(res, error);
     }
