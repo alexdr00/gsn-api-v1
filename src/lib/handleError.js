@@ -17,8 +17,12 @@ function handleError(res, error) {
   }
 
   const isAuthError = error.code === 'NotAuthorizedException';
+  const isTokenExpired = error.code === 'TokenExpiredError';
+  const isSessionExpired = error.code === 'SessionExpiredError';
   const authErrorConditions = [
     isAuthError,
+    isTokenExpired,
+    isSessionExpired,
   ];
   if (any(authErrorConditions)) {
     const notAuthorizedError = makeUnauthorizedError();

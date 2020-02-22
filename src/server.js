@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const authRouter = require('./routes/authRoutes');
+const requireAuth = require('./middleware/requireAuth');
 
 function server() {
   const app = express();
@@ -18,6 +19,7 @@ function server() {
     app.use(bodyParser.urlencoded({ extended: false }));
     app.use(bodyParser.json());
     app.use(morgan('dev'));
+    app.use(requireAuth);
   }
 
   function mountRoutes() {

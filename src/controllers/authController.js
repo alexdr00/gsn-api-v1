@@ -6,7 +6,7 @@ const authService = require('../services/authService');
 const infoMessages = require('../constants/infoMessages');
 
 function authController() {
-  return { signOut, signIn, signUp };
+  return { signIn, signUp, signOut };
 
   async function signIn(req, res) {
     try {
@@ -16,11 +16,11 @@ function authController() {
 
       const tokens = await authService.signIn(normalizedData);
 
-      const response = {
-        message: infoMessages.SIGN_IN({ name: 'AlexTEMP' }),
+      const responsePayload = {
+        message: infoMessages.SIGN_IN,
         data: tokens,
       };
-      handleSuccess(res, response);
+      handleSuccess(res, responsePayload);
     } catch (error) {
       handleError(res, error);
     }
@@ -33,18 +33,28 @@ function authController() {
       const normalizedData = normalize.signUpData();
 
       await authService.signUp(normalizedData);
-      const response = {
+      const responsePayload = {
         message: infoMessages.SIGN_UP,
         data: null,
       };
-      handleSuccess(res, response);
+      handleSuccess(res, responsePayload);
     } catch (error) {
       handleError(res, error);
     }
   }
 
-  function signOut(req, res) {
-    res.json({ c: 'signout' });
+  async function signOut(req, res) {
+    try {
+      const { email } = req.user;
+      await authService.signOut(email);
+      const responsePayload = {
+        message: infoMessages.SIGN_OUT,
+        data: null,
+      };
+      handleSuccess(res, responsePayload);
+    } catch (error) {
+      handleError(error);
+    }
   }
 }
 

@@ -1,5 +1,5 @@
-function handleSuccess(res, response) {
-  const { status = 200, message, data } = response;
+function handleSuccess(res, responsePayload) {
+  const { status = 200, message, data } = responsePayload;
 
   res.status(status).json({
     message,
