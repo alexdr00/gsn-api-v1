@@ -1,4 +1,5 @@
 const { CognitoRefreshToken, CognitoUser, AuthenticationDetails } = require('amazon-cognito-identity-js');
+const errorCodes = require('../../constants/errorCodes');
 
 function authentication(state) {
   const { userPool } = state;
@@ -38,7 +39,12 @@ function authentication(state) {
     const RefreshToken = new CognitoRefreshToken({ RefreshToken: refreshToken });
     return new Promise((resolve, reject) => {
       cognitoUser.refreshSession(RefreshToken, (err, result) => {
+        const error = { ...err };
+
         if (err) {
+          if (error.message === 'Refresh Token has expired') {
+            error.code = errorCodes.SESSION_EXPIRED;
+          }
           reject(err);
         }
 

@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const jwkToPem = require('jwk-to-pem');
 const jwt = require('jsonwebtoken');
-// Refresh Token has expired
+
 async function verifyIdToken(idToken) {
   const jwksUrl = process.env.JWKS_URL;
   const jwksResponse = await fetch(jwksUrl);

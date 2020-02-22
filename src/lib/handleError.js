@@ -2,6 +2,7 @@
 
 const any = require('../helpers/any');
 const errorMessages = require('../constants/errorsMessages');
+const errorCodes = require('../constants/errorCodes');
 const logger = require('../lib/logger');
 
 const isProductionEnv = process.env.NODE_ENV === 'production';
@@ -16,9 +17,9 @@ function handleError(res, error) {
     return res.status(400).json({ error: badRequestError });
   }
 
-  const isAuthError = error.code === 'NotAuthorizedException';
-  const isTokenExpired = error.code === 'TokenExpiredError';
-  const isSessionExpired = error.code === 'SessionExpiredError';
+  const isAuthError = error.code === errorCodes.NOT_AUTHORIZED;
+  const isTokenExpired = error.code === errorCodes.TOKEN_EXPIRED;
+  const isSessionExpired = error.code === errorCodes.SESSION_EXPIRED;
   const authErrorConditions = [
     isAuthError,
     isTokenExpired,
@@ -29,8 +30,8 @@ function handleError(res, error) {
     return res.status(401).json({ error: notAuthorizedError });
   }
 
-  const userExists = error.code === 'UsernameExistsException';
-  const userIsNotConfirmed = error.code === 'UserNotConfirmedException';
+  const userExists = error.code === errorCodes.USERNAME_EXISTS;
+  const userIsNotConfirmed = error.code === errorCodes.USERNAME_NOT_CONFIRMED;
   const forbbidenErrorConditions = [
     userExists,
     userIsNotConfirmed,
@@ -111,7 +112,7 @@ function handleError(res, error) {
     logger.error({ ...errorDetails, ...error, stack: error.stack });
     if (!isProductionEnv) {
       if (error.stack) {
-        // logging with conventional console in order to have quick
+        // Logging with conventional console.error in order to have quick
         // access to the links provided by the stack trace.
         console.error(error.stack);
       }
