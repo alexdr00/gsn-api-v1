@@ -7,7 +7,6 @@ async function requireAuth(req, res, next) {
   const unprotectedEndpoints = [
     '/auth/sign-in',
     '/auth/sign-up',
-    '/auth/refresh-token',
     '/health',
   ];
 

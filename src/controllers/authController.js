@@ -78,9 +78,10 @@ function makeAuthController() {
   async function refreshIdToken(req, res) {
     try {
       const validatedData = validateAuth.validateTokensData(req.body);
-      const { refreshToken, idToken } = validatedData;
+      const { email } = req.user;
+      const { refreshToken } = validatedData;
 
-      const tokens = await authService.refreshIdToken(idToken, refreshToken);
+      const tokens = await authService.refreshIdToken(refreshToken, email);
       const responsePayload = {
         message: infoMessages.ID_TOKEN_REFRESHED,
         data: tokens,

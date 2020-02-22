@@ -31,8 +31,6 @@ const signUpSchema = Joi.object({
 });
 
 const tokensSchema = Joi.object({
-  idToken: Joi.string()
-    .required(),
   refreshToken: Joi.string()
     .required(),
 });

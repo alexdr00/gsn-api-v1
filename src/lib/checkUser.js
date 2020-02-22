@@ -12,8 +12,11 @@ async function checkUser(bearerToken, originEndpoint = '') {
     throw error;
   }
 
+  const isRefreshTokenEndpoint = originEndpoint.includes('/auth/refresh-token');
   const idToken = bearerToken.slice(7, bearerToken.length);
-  const user = await verifyIdToken(idToken);
+  const user = await verifyIdToken(idToken, {
+    ignoreExpiration: isRefreshTokenEndpoint,
+  });
   const userSession = await session.get(user.email);
 
   if (userSession === null) {
