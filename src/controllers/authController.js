@@ -4,9 +4,12 @@ const handleError = require('../lib/handleError');
 const handleSuccess = require('../lib/handleSuccess');
 const authService = require('../services/authService');
 const infoMessages = require('../constants/infoMessages');
+const checkUser = require('../lib/checkUser');
 
-function authController() {
-  return { signIn, signUp, signOut };
+function makeAuthController() {
+  return {
+    signIn, signUp, signOut, checkIsAuthenticated, refreshIdToken,
+  };
 
   async function signIn(req, res) {
     try {
@@ -56,6 +59,37 @@ function authController() {
       handleError(error);
     }
   }
+
+  async function checkIsAuthenticated(req, res) {
+    try {
+      const { authorization: bearerToken } = req.headers;
+
+      await checkUser(bearerToken);
+      const responsePayload = {
+        message: null,
+        data: true,
+      };
+      handleSuccess(res, responsePayload);
+    } catch (error) {
+      handleError(res, error);
+    }
+  }
+
+  async function refreshIdToken(req, res) {
+    try {
+      const validatedData = validateAuth.validateTokensData(req.body);
+      const { refreshToken, idToken } = validatedData;
+
+      const tokens = await authService.refreshIdToken(idToken, refreshToken);
+      const responsePayload = {
+        message: infoMessages.ID_TOKEN_REFRESHED,
+        data: tokens,
+      };
+      handleSuccess(res, responsePayload);
+    } catch (error) {
+      handleError(res, error);
+    }
+  }
 }
 
-module.exports = authController();
+module.exports = makeAuthController();

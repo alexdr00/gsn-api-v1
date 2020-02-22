@@ -45,7 +45,7 @@ function authentication(state) {
           if (error.message === 'Refresh Token has expired') {
             error.code = errorCodes.SESSION_EXPIRED;
           }
-          reject(err);
+          return reject(error);
         }
 
         resolve(getResponsePayload(result));

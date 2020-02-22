@@ -30,8 +30,15 @@ const signUpSchema = Joi.object({
     .required(),
 });
 
+const tokensSchema = Joi.object({
+  idToken: Joi.string()
+    .required(),
+  refreshToken: Joi.string()
+    .required(),
+});
+
 function makeAuthValidator() {
-  return { validateSignInData, validateSignUpData };
+  return { validateSignInData, validateSignUpData, validateTokensData };
 
   function validateSignInData(signInData) {
     const validation = signInSchema.validate(signInData);
@@ -45,6 +52,16 @@ function makeAuthValidator() {
 
   function validateSignUpData(signUpData) {
     const validation = signUpSchema.validate(signUpData);
+
+    if (validation.error) {
+      throw validation.error;
+    }
+
+    return validation.value;
+  }
+
+  function validateTokensData(tokens) {
+    const validation = tokensSchema.validate(tokens);
 
     if (validation.error) {
       throw validation.error;

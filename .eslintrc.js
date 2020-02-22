@@ -19,5 +19,6 @@ module.exports = {
     'no-use-before-define': 'off',
     'no-unused-vars': 'warn',
     'consistent-return': 'off',
+    'max-len': ['error', { code: 120 }]
   },
 };
