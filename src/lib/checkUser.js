@@ -3,6 +3,8 @@ const session = require('../lib/session');
 const errorCodes = require('../constants/errorCodes');
 
 async function checkUser(bearerToken, originEndpoint = '') {
+  console.log(session);
+
   if (!bearerToken && !bearerToken.startsWith('Bearer ')) {
     const error = {
       name: errorCodes.NOT_AUTHORIZED,
@@ -11,7 +13,6 @@ async function checkUser(bearerToken, originEndpoint = '') {
     };
     throw error;
   }
-
   const isRefreshTokenEndpoint = originEndpoint.includes('/auth/refresh-token');
   const idToken = bearerToken.slice(7, bearerToken.length);
   const user = await verifyIdToken(idToken, {
