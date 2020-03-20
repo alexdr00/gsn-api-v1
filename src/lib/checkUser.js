@@ -3,9 +3,7 @@ const session = require('../lib/session');
 const errorCodes = require('../constants/errorCodes');
 
 async function checkUser(bearerToken, originEndpoint = '') {
-  console.log(session);
-
-  if (!bearerToken && !bearerToken.startsWith('Bearer ')) {
+  if (!bearerToken || !bearerToken.startsWith('Bearer ')) {
     const error = {
       name: errorCodes.NOT_AUTHORIZED,
       code: errorCodes.NOT_AUTHORIZED,
